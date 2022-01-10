@@ -10,9 +10,10 @@ interface FetchObject {
   data: APIResults;
 }
 
-export const FetchResults = (barprops: BarsWithProps, concprops: ConcreteProps): FetchObject => {
-  let show = false;
-  let data = {} as APIResults;
+export const FetchResults = (
+  barprops: BarsWithProps,
+  concprops: ConcreteProps
+): Promise<FetchObject> => {
   let barslist: any[][] = [["bar_id", "As", "db", "x", "y"]];
 
   Object.entries(barprops).map(([key, val]) =>
@@ -28,29 +29,41 @@ export const FetchResults = (barprops: BarsWithProps, concprops: ConcreteProps):
     Reinforcement: barslist,
   };
 
-  if (barprops) {
-    const fetchData = async () => {
-      const res = await fetch("/api/ConcreteBeam", {
-        method: "POST",
-        cache: "no-cache",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify(request_dict),
-      });
+  // https://encompapp.com/
+  // "/api/ConcreteBeam"
 
-      const unparsed_data = (await res.json()) as APIResultsUnparced;
+  const fetchData = async () => {
+    let show = false;
+    let data = {
+      c: 0,
+      "\\phi M_n": 0,
+      reinforcementHeaders: ["a", "b"],
+      reinforcementResults: [[0, 1]],
+    } as APIResults;
 
+    const res = await fetch("http://127.0.0.1:5000/api/ConcreteBeam", {
+      method: "POST",
+      cache: "no-cache",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify(request_dict),
+    });
+
+    const unparsed_data = (await res.json()) as APIResultsUnparced;
+    const headers_only = unparsed_data.ReinforcementResults.shift();
+
+    if (headers_only) {
       data = {
-        reinforcementHeaders: unparsed_data.ReinforcementResults.shift(),
+        reinforcementHeaders: headers_only.map((a) => String(a)),
         reinforcementResults: unparsed_data.ReinforcementResults,
         "\\phi M_n": unparsed_data["\\phi M_n"],
         c: unparsed_data.c,
       };
       show = true;
-    };
+    }
 
-    fetchData();
-  }
+    return { show, data };
+  };
 
   //.then(setDatatable(getbeam.ReinforcementResults)) // move to useEffect
-  return { show, data };
+  return fetchData();
 };

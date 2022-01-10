@@ -110,9 +110,10 @@ export default function BeamShapeForm({ setShowResult, setGetBeam }: FormProps) 
       h: h,
     };
 
-    const result = FetchResults(genprops, concrete_props);
-    setShowResult(result.show);
-    setGetBeam(result.data);
+    FetchResults(genprops, concrete_props).then((result) => {
+      setShowResult(result.show);
+      setGetBeam(result.data);
+    });
   }, [
     w,
     h,
