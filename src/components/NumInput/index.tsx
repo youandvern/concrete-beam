@@ -6,7 +6,7 @@ import { FormControl, InputLabel, OutlinedInput, InputAdornment } from "@mui/mat
 interface NumProps {
   label?: string;
   value?: number;
-  onChange?: (a: number) => number;
+  onChange?: ((a: number) => number) | React.Dispatch<React.SetStateAction<number>>;
   unit?: string;
   min?: number;
   max?: number;

@@ -6,7 +6,7 @@ import { Grid, Typography, Slider, TextField } from "@mui/material/";
 interface SlideProps {
   label?: string;
   value?: number;
-  onChange?: (a: number | number[]) => number | number[];
+  onChange?: ((a: number | number[]) => void) | React.Dispatch<React.SetStateAction<any>>;
   min?: number;
   max?: number;
   step?: number;
@@ -21,7 +21,7 @@ export default function NumSlider({
   max = 10,
   step = 1,
   marks = true,
-  onChange = (a) => a,
+  onChange = (a: number | number[]) => a,
 }: SlideProps) {
   return (
     // grid to group label and slider left of value display
