@@ -115,8 +115,6 @@ export default function BeamShapeForm({ setShowResult, setGetBeam }: FormProps) 
   // reset beam section scaling to fit inside component when window size changes
   useEffect(() => {
     function resizeBeam() {
-      console.log("tester");
-
       if (beamGridRef.current !== null) {
         setMaxwidth(beamGridRef.current.offsetWidth - 6);
         setMaxheight(Math.min(beamGridRef.current.offsetHeight, (window.innerHeight * 3) / 4));
