@@ -36,3 +36,16 @@
     transform: rotate(360deg);
   }
 }
+
+div.page-top-padding {
+  padding: 5px;
+}
+
+div.main-text-container {
+  padding-top: 12px;
+  padding-bottom: 24px;
+}
+
+div.justify-apart {
+  justify-content: space-between;
+}

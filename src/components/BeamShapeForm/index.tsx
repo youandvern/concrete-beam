@@ -15,7 +15,7 @@ import {
   Typography,
   Button,
 } from "@mui/material";
-import ExpandMoreIcon from "@mui/material/Icon";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ConcreteProps from "../Interfaces/ConcreteProps";
 import APIResults from "../Interfaces/APIResults";
 
@@ -46,62 +46,58 @@ export default function BeamShapeForm({ setShowResult, setGetBeam }: FormProps) 
 
   const beamGridRef = useRef<HTMLDivElement>(null);
 
-  // move setGetBeam to input parameter $$$$$$$$$$$$$$$$$$$$$44
+  const [barProps, setBarProps] = useState<BarsWithProps>({});
 
-  const [barprops, setBarProps] = useState<BarsWithProps>({});
+  // need to setBarProps whenever props change
+  useEffect(() => {
+    //(w, h, nbars, barsize, side_cover, bot_cover, top_cover, maxheight, maxwidth, nbarst, barsizet, nlegs=0, legsize=4) {
+    const genprops = {} as BarsWithProps;
+    let i = 0;
+    const dleg = nlegs < 2 ? 0 : bar_diameter(legsize); // diameter of stirrup leg bars
 
-  const updateResult = useCallback(() => {
-    // generate new bars for api call
-    function generateBars() {
-      //(w, h, nbars, barsize, side_cover, bot_cover, top_cover, maxheight, maxwidth, nbarst, barsizet, nlegs=0, legsize=4) {
-      const genprops = {} as BarsWithProps;
-      let i = 0;
-      const dleg = nlegs < 2 ? 0 : bar_diameter(legsize); // diameter of stirrup leg bars
+    const dbar = bar_diameter(barsize);
+    const bary = h - bot_cover - dleg - dbar / 2;
 
-      const dbar = bar_diameter(barsize);
-      const bary = h - bot_cover - dleg - dbar / 2;
+    const dbart = bar_diameter(barsizet);
+    const baryt = top_cover + dleg + dbart / 2;
 
-      const dbart = bar_diameter(barsizet);
-      const baryt = top_cover + dleg + dbart / 2;
+    let keyname = "barno";
 
-      let keyname = "barno";
-
-      // set up bot bar positions
-      if (nbars > 1) {
-        const sbar = (w - 2 * side_cover - 2 * dleg - dbar) / (nbars - 1);
-        for (; i < nbars; i++) {
-          genprops[keyname + i] = {
-            x: side_cover + dleg + dbar / 2 + i * sbar,
-            y: bary,
-            rbar: dbar / 2,
-            id: "barno" + i,
-          };
-        }
-      } else {
-        genprops[keyname + i] = { x: w / 2, y: bary, rbar: dbar / 2, id: "barno" + i };
-        i++;
+    // set up bot bar positions
+    if (nbars > 1) {
+      const sbar = (w - 2 * side_cover - 2 * dleg - dbar) / (nbars - 1);
+      for (; i < nbars; i++) {
+        genprops[keyname + i] = {
+          x: side_cover + dleg + dbar / 2 + i * sbar,
+          y: bary,
+          rbar: dbar / 2,
+          id: "barno" + i,
+        };
       }
-
-      // set up top bar positions
-      if (nbarst > 1) {
-        const sbart = (w - 2 * side_cover - 2 * dleg - dbart) / (nbarst - 1);
-        for (; i < nbarst + nbars; i++) {
-          genprops[keyname + i] = {
-            x: side_cover + dleg + dbart / 2 + (i - nbars) * sbart,
-            y: baryt,
-            rbar: dbart / 2,
-            id: "barno" + i,
-          };
-        }
-      } else if (nbarst === 1) {
-        genprops[keyname + i] = { x: w / 2, y: baryt, rbar: dbart / 2, id: "barno" + i };
-      }
-
-      return genprops;
+    } else {
+      genprops[keyname + i] = { x: w / 2, y: bary, rbar: dbar / 2, id: "barno" + i };
+      i++;
     }
 
-    const genprops = generateBars();
+    // set up top bar positions
+    if (nbarst > 1) {
+      const sbart = (w - 2 * side_cover - 2 * dleg - dbart) / (nbarst - 1);
+      for (; i < nbarst + nbars; i++) {
+        genprops[keyname + i] = {
+          x: side_cover + dleg + dbart / 2 + (i - nbars) * sbart,
+          y: baryt,
+          rbar: dbart / 2,
+          id: "barno" + i,
+        };
+      }
+    } else if (nbarst === 1) {
+      genprops[keyname + i] = { x: w / 2, y: baryt, rbar: dbart / 2, id: "barno" + i };
+    }
+
     setBarProps(genprops);
+  }, [nlegs, legsize, barsize, h, bot_cover, barsizet, top_cover, nbars, nbarst, w, side_cover]);
+
+  const updateResult = useCallback(() => {
     const concrete_props: ConcreteProps = {
       fc: fc,
       fy: fy,
@@ -110,32 +106,17 @@ export default function BeamShapeForm({ setShowResult, setGetBeam }: FormProps) 
       h: h,
     };
 
-    FetchResults(genprops, concrete_props).then((result) => {
+    FetchResults(barProps, concrete_props).then((result) => {
       setShowResult(result.show);
       setGetBeam(result.data);
     });
-  }, [
-    w,
-    h,
-    nbars,
-    barsize,
-    side_cover,
-    bot_cover,
-    top_cover,
-    nbarst,
-    barsizet,
-    nlegs,
-    legsize,
-    fc,
-    fy,
-    setGetBeam,
-    setShowResult,
-  ]);
+  }, [fc, fy, w, h, barProps, setShowResult, setGetBeam]);
 
+  // reset beam section scaling to fit inside component when window size changes
   useEffect(() => {
     function resizeBeam() {
-      // setMaxwidth(window.innerWidth/4)
-      // setMaxheight(window.innerHeight/2)
+      console.log("tester");
+
       if (beamGridRef.current !== null) {
         setMaxwidth(beamGridRef.current.offsetWidth - 6);
         setMaxheight(Math.min(beamGridRef.current.offsetHeight, (window.innerHeight * 3) / 4));
@@ -143,12 +124,15 @@ export default function BeamShapeForm({ setShowResult, setGetBeam }: FormProps) 
     }
 
     window.addEventListener("resize", resizeBeam);
+    window.addEventListener("load", resizeBeam);
 
     return () => {
       window.removeEventListener("resize", resizeBeam);
+      window.removeEventListener("load", resizeBeam);
     };
-  });
+  }, []);
 
+  // hide results if any input changes
   useEffect(() => {
     setShowResult(false);
   }, [
@@ -168,13 +152,6 @@ export default function BeamShapeForm({ setShowResult, setGetBeam }: FormProps) 
     setShowResult,
   ]);
 
-  // useEffect(() => {
-  //   if (beamGridRef.current) {
-  //     setMaxwidth(beamGridRef.current.offsetWidth - 6);
-  //     setMaxheight(Math.min(beamGridRef.current.offsetHeight, (window.innerHeight * 3) / 4));
-  //   }
-  // }, [beamGridRef]);
-
   const max_side_cover = w / 2 - bar_diameter(barsize);
   const max_bot_cover = h - bar_diameter(barsize);
   const max_top_cover = h - bar_diameter(barsizet);
@@ -192,7 +169,7 @@ export default function BeamShapeForm({ setShowResult, setGetBeam }: FormProps) 
           maxheight={maxheight}
           nlegs={nlegs}
           legsize={legsize}
-          bar_props={barprops}
+          bar_props={barProps}
           setBarState={setBarProps}
         />
       </Grid>

@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import "./App.css";
+import "./App.css?v=1";
 import { createTheme, ThemeProvider, Container } from "@mui/material";
 import BeamShapeForm from "./components/BeamShapeForm";
 import BeamResults from "./components/BeamResults";
 import APIResults from "./components/Interfaces/APIResults";
+import HomeBar from "./components/HomeBar";
+import IntroText from "./components/IntroText";
 
 function App() {
   const theme = createTheme({
@@ -28,6 +30,8 @@ function App() {
   return (
     <Container maxWidth="md">
       <ThemeProvider theme={theme}>
+        <HomeBar />
+        <IntroText />
         <BeamShapeForm setShowResult={setShowResult} setGetBeam={setGetBeam} />
         <BeamResults showresult={showResult} getbeam={getBeam} />
       </ThemeProvider>
