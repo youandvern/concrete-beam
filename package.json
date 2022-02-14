@@ -1,5 +1,6 @@
 {
   "name": "concrete-beam",
+  "homepage": "http://concrete.encompapp.com",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -45,5 +46,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "proxy": "http://localhost:5000"
 }
