@@ -2,4 +2,4 @@
 
 Quick and user-friendly tool to calculate the capacity of a concrete beam.
 
-[Visit the site](concrete.encompapp.com)
+[Visit the site](https://concrete.encompapp.com/)
