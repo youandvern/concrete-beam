@@ -30,7 +30,7 @@ export const FetchResults = (
   };
 
   // https://encompapp.com/
-  // "/api/ConcreteBeam"
+  // http://127.0.0.1:5000
 
   const fetchData = async () => {
     let show = false;
@@ -41,7 +41,7 @@ export const FetchResults = (
       reinforcementResults: [[0, 1]],
     } as APIResults;
 
-    const res = await fetch("http://127.0.0.1:5000/api/ConcreteBeam", {
+    const res = await fetch("/api/ConcreteBeam", {
       method: "POST",
       cache: "no-cache",
       headers: { "Content-Type": "application/json", Accept: "application/json" },

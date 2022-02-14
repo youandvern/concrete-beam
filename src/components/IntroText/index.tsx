@@ -16,8 +16,9 @@ export default function IntroText() {
             Welcome to the concrete beam capacity calculator. A simple, fast, and powerful tool for
             checking the moment capacity of any concrete beam section. Please explore the tool and
             our open source calculation building application,{" "}
-            <a href="https://encompapp.com/">Encomp</a>. If you liked the tool or want to see other
-            features added, please leave us a message at{" "}
+            <a href="https://encompapp.com/">Encomp</a>. <br />
+            <br />
+            If you liked the tool or want to see other features added, please leave us a message at{" "}
             <a href="https://encompapp.com/contact">encompapp.com/contact</a>, we would love to hear
             from you!
           </Typography>
