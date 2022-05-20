@@ -116,11 +116,12 @@ export default function BeamShapeForm({ setShowResult, setGetBeam }: FormProps) 
   useEffect(() => {
     function resizeBeam() {
       if (beamGridRef.current !== null) {
-        setMaxwidth(beamGridRef.current.offsetWidth - 6);
-        setMaxheight(Math.min(beamGridRef.current.offsetHeight, (window.innerHeight * 3) / 4));
+        setMaxwidth(beamGridRef.current.clientWidth);
+        setMaxheight(beamGridRef.current.clientWidth * 2);
       }
     }
 
+    resizeBeam();
     window.addEventListener("resize", resizeBeam);
     window.addEventListener("load", resizeBeam);
 

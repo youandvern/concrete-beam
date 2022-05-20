@@ -36,26 +36,16 @@ export default function BeamSection({
   bar_props,
   setBarState,
 }: SectionProps) {
-  // scale beam image up to fill frame $$$ useState req'd? $$$$
-  const [fscale, setFscale] = useState(1.0);
-  const [offX, setOffX] = useState(0.0);
-  const off_y = 0.0;
+  const border = Math.max(width * 2, height) / 100;
+  const sceneWidth = width + 2 * border;
+  const sceneHeight = height + 2 * border;
+  const fscale = Math.min(maxheight / sceneHeight, maxwidth / sceneWidth);
 
   const [legOffsets, setLegOffsets] = useState<number[]>([]);
   const [stirrup_hoop, setStirrupHoop] = useState<any>(null);
   const [leg_hoop_space, setLegHoopSpace] = useState(1);
 
   const dleg = useRef(0);
-
-  // change display scale when beam or screen height/width changes
-  useEffect(() => {
-    if (height / width > maxheight / maxwidth) {
-      setFscale(maxheight / height);
-      setOffX((maxwidth - (width * maxheight) / height) / 2);
-    } else {
-      setFscale(maxwidth / width);
-    }
-  }, [height, width, maxheight, maxwidth]);
 
   // set up stirrup legs and hoop spacing
   useEffect(() => {
@@ -87,8 +77,8 @@ export default function BeamSection({
   }, [nlegs, leg_hoop_space, width, height, side_cover, bot_cover, top_cover, legsize]);
 
   return (
-    <Stage width={maxwidth} height={maxheight}>
-      <Layer scale={{ x: fscale, y: fscale }} x={offX} y={off_y}>
+    <Stage width={maxwidth} height={maxheight} x={(maxwidth - sceneWidth * fscale) / 2}>
+      <Layer scale={{ x: fscale, y: fscale }} x={border * fscale} y={border * fscale}>
         <Rect width={width} height={height} fill="grey" />
 
         {stirrup_hoop}
