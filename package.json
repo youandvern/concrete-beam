@@ -1,6 +1,6 @@
 {
   "name": "concrete-beam",
-  "homepage": "http://concrete.encompapp.com",
+  "homepage": "https://concrete.encompapp.com",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -15,6 +15,7 @@
     "@types/node": "^16.11.19",
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.11",
+    "gh-pages": "^4.0.0",
     "konva": "^8.3.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -24,6 +25,8 @@
     "web-vitals": "^2.1.2"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
