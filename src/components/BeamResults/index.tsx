@@ -26,7 +26,7 @@ export default function BeamResults({ showresult = false, getbeam }: ResultProps
           <Grid item xs={6} container direction="column" spacing={0} className="justify-apart">
             <Grid item>
               <Typography variant="h5" gutterBottom>
-                Section Capacity (&Phi;M<sub>n</sub>) = {getbeam["\\phi M_n"].toFixed(2)} kip-ft
+                Section Capacity (&Phi;M<sub>n</sub>) = {getbeam.Mn.toFixed(2)} kip-ft
               </Typography>
 
               <Typography variant="subtitle2" gutterBottom>

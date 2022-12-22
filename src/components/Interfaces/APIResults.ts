@@ -1,12 +1,21 @@
 export default interface APIResults {
   reinforcementHeaders: string[];
   reinforcementResults: number[][];
-  "\\phi M_n": number;
+  Mn: number;
   c: number;
 }
 
 export interface APIResultsUnparced {
-  ReinforcementResults: any[][];
-  "\\phi M_n": number;
+  allItems: AllItems;
+  summary: SummaryResults;
+}
+
+interface SummaryResults {
+  reinforcement: any[][];
+  Mn: number;
   c: number;
+}
+
+interface AllItems {
+  [key: string]: any;
 }

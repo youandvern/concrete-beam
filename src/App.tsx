@@ -22,7 +22,7 @@ function App() {
   const [showResult, setShowResult] = useState(false);
   const [getBeam, setGetBeam] = useState<APIResults>({
     c: 0,
-    "\\phi M_n": 0,
+    Mn: 0,
     reinforcementHeaders: ["a", "b"],
     reinforcementResults: [[0, 1]],
   });
