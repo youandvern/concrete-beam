@@ -5,7 +5,8 @@ import { APIResultsUnparced } from "../Interfaces/APIResults";
 
 // https://api.encompapp.com
 // http://127.0.0.1:8000
-const BASE_URL = "https://api.encompapp.com";
+// const BASE_URL = "https://api.encompapp.com";
+const BASE_URL = "http://127.0.0.1:8000";
 
 // https://www.smashingmagazine.com/2020/07/custom-react-hook-fetch-cache-data/
 
@@ -18,10 +19,18 @@ export const FetchResults = (
   barprops: BarsWithProps,
   concprops: ConcreteProps
 ): Promise<FetchObject> => {
-  let barslist: any[][] = [["bar_id", "As", "db", "x", "y"]];
+  let barslist: any[][] = [
+    [
+      "Bar #",
+      "\\( A_s ( \\mathrm{in^2} ) \\)",
+      "\\( d_b ( \\mathrm{in} ) \\)",
+      "\\( x ( \\mathrm{in} ) \\)",
+      "\\( y ( \\mathrm{in} ) \\)",
+    ],
+  ];
 
   Object.entries(barprops).map(([key, val]) =>
-    barslist.push([key, Math.PI * val.rbar ** 2, val.rbar * 2, val.x, val.y])
+    barslist.push([key, val.barArea, val.rbar * 2, +val.x.toFixed(6), +val.y.toFixed(6)])
   );
 
   let request_dict = {
@@ -31,13 +40,18 @@ export const FetchResults = (
     b: concprops.b,
     h: concprops.h,
     reinforcement: barslist,
+    nShearBars: concprops.nShearBars,
+    spacingShearBars: concprops.spacingShearBars,
+    sizeShearBars: concprops.sizeShearBars,
   };
 
   const fetchData = async () => {
     let show = false;
     let data = {
+      reportItems: [],
       c: 0,
       Mn: 0,
+      Vn: 0,
       reinforcementHeaders: ["a", "b"],
       reinforcementResults: [[0, 1]],
     } as APIResults;
@@ -54,9 +68,11 @@ export const FetchResults = (
 
     if (headers_only) {
       data = {
+        reportItems: unparsed_data.allItems,
         reinforcementHeaders: headers_only.map((a) => String(a)),
         reinforcementResults: unparsed_data.summary.reinforcement,
         Mn: unparsed_data.summary.Mn,
+        Vn: unparsed_data.summary.Vn,
         c: unparsed_data.summary.c,
       };
       show = true;

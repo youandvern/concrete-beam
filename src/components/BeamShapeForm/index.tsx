@@ -5,7 +5,7 @@ import NumInput from "../NumInput";
 import NumSlider from "../NumSlider";
 import BeamSection from "../BeamSection";
 import { FetchResults } from "../FetchResults";
-import { bar_diameter } from "../utilities";
+import { bar_area, bar_diameter } from "../utilities";
 import BarsWithProps from "../Interfaces/BarsWithProps";
 import {
   Grid,
@@ -16,17 +16,18 @@ import {
   Button,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ConcreteProps from "../Interfaces/ConcreteProps";
+import ConcreteProps, { BarSizeT } from "../Interfaces/ConcreteProps";
 import APIResults from "../Interfaces/APIResults";
 
 // expected properties to draw beam section
 interface FormProps {
   setShowResult: React.Dispatch<React.SetStateAction<boolean>>;
   setGetBeam: React.Dispatch<React.SetStateAction<APIResults>>;
+  setGetBeamSection: React.Dispatch<React.SetStateAction<(n: number) => JSX.Element>>;
 }
 
 // Beam shape in input form for beam capacity calculation
-export default function BeamShapeForm({ setShowResult, setGetBeam }: FormProps) {
+export default function BeamShapeForm({ setShowResult, setGetBeam, setGetBeamSection }: FormProps) {
   const [fc, setFc] = useState(4000);
   const [fy, setFy] = useState(60);
   const [w, setW] = useState(12);
@@ -43,6 +44,7 @@ export default function BeamShapeForm({ setShowResult, setGetBeam }: FormProps) 
   const [top_cover, setTop_cover] = useState(1.5);
   const [nlegs, setNlegs] = useState(0);
   const [legsize, setLegsize] = useState(3);
+  const [legspacing, setLegspacing] = useState(8);
 
   const beamGridRef = useRef<HTMLDivElement>(null);
 
@@ -61,7 +63,7 @@ export default function BeamShapeForm({ setShowResult, setGetBeam }: FormProps) 
     const dbart = bar_diameter(barsizet);
     const baryt = top_cover + dleg + dbart / 2;
 
-    let keyname = "barno";
+    const keyname = "Bar #";
 
     // set up bot bar positions
     if (nbars > 1) {
@@ -70,12 +72,19 @@ export default function BeamShapeForm({ setShowResult, setGetBeam }: FormProps) 
         genprops[keyname + i] = {
           x: side_cover + dleg + dbar / 2 + i * sbar,
           y: bary,
+          barArea: bar_area(barsize),
           rbar: dbar / 2,
-          id: "barno" + i,
+          id: keyname + i,
         };
       }
     } else {
-      genprops[keyname + i] = { x: w / 2, y: bary, rbar: dbar / 2, id: "barno" + i };
+      genprops[keyname + i] = {
+        x: w / 2,
+        y: bary,
+        barArea: bar_area(barsize),
+        rbar: dbar / 2,
+        id: keyname + i,
+      };
       i++;
     }
 
@@ -86,12 +95,19 @@ export default function BeamShapeForm({ setShowResult, setGetBeam }: FormProps) 
         genprops[keyname + i] = {
           x: side_cover + dleg + dbart / 2 + (i - nbars) * sbart,
           y: baryt,
+          barArea: bar_area(barsizet),
           rbar: dbart / 2,
-          id: "barno" + i,
+          id: keyname + i,
         };
       }
     } else if (nbarst === 1) {
-      genprops[keyname + i] = { x: w / 2, y: baryt, rbar: dbart / 2, id: "barno" + i };
+      genprops[keyname + i] = {
+        x: w / 2,
+        y: baryt,
+        barArea: bar_area(barsizet),
+        rbar: dbart / 2,
+        id: keyname + i,
+      };
     }
 
     setBarProps(genprops);
@@ -104,6 +120,9 @@ export default function BeamShapeForm({ setShowResult, setGetBeam }: FormProps) 
       Es: 29000,
       b: w,
       h: h,
+      nShearBars: nlegs,
+      spacingShearBars: legspacing,
+      sizeShearBars: `\\#${legsize}` as BarSizeT,
     };
 
     FetchResults(barProps, concrete_props).then((result) => {
@@ -117,7 +136,7 @@ export default function BeamShapeForm({ setShowResult, setGetBeam }: FormProps) 
     function resizeBeam() {
       if (beamGridRef.current !== null) {
         setMaxwidth(beamGridRef.current.clientWidth);
-        setMaxheight(beamGridRef.current.clientWidth * 2);
+        setMaxheight(Math.min(beamGridRef.current.clientWidth * 2, 0.75 * window.innerHeight));
       }
     }
 
@@ -146,6 +165,7 @@ export default function BeamShapeForm({ setShowResult, setGetBeam }: FormProps) 
     h,
     nlegs,
     legsize,
+    legspacing,
     fc,
     fy,
     setShowResult,
@@ -155,22 +175,43 @@ export default function BeamShapeForm({ setShowResult, setGetBeam }: FormProps) 
   const max_bot_cover = h - bar_diameter(barsize);
   const max_top_cover = h - bar_diameter(barsizet);
 
+  const getBeamSection = (maxHeightOverride: number | null) => (
+    <BeamSection
+      width={w}
+      height={h}
+      side_cover={side_cover}
+      bot_cover={bot_cover}
+      top_cover={top_cover}
+      maxwidth={maxwidth}
+      maxheight={maxHeightOverride || maxheight}
+      nlegs={nlegs}
+      legsize={legsize}
+      bar_props={barProps}
+      setBarState={setBarProps}
+    />
+  );
+
+  useEffect(() => {
+    setGetBeamSection(() => getBeamSection);
+  }, [
+    w,
+    h,
+    side_cover,
+    bot_cover,
+    top_cover,
+    maxwidth,
+    maxheight,
+    nlegs,
+    legsize,
+    barProps,
+    setBarProps,
+    setGetBeamSection,
+  ]);
+
   return (
     <Grid container className="small-margins" spacing={3}>
       <Grid item xs={4} ref={beamGridRef}>
-        <BeamSection
-          width={w}
-          height={h}
-          side_cover={side_cover}
-          bot_cover={bot_cover}
-          top_cover={top_cover}
-          maxwidth={maxwidth}
-          maxheight={maxheight}
-          nlegs={nlegs}
-          legsize={legsize}
-          bar_props={barProps}
-          setBarState={setBarProps}
-        />
+        {getBeamSection(null)}
       </Grid>
       <Grid item xs={1}></Grid>
       <Grid item xs={6}>
@@ -317,6 +358,17 @@ export default function BeamShapeForm({ setShowResult, setGetBeam }: FormProps) 
                       min={3}
                       max={8}
                       step={1}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <NumInput
+                      label="Stirrup Leg Spacing"
+                      value={legspacing}
+                      onChange={setLegspacing}
+                      unit="in"
+                      min={0}
+                      max={100}
                     />
                   </Grid>
                 </Grid>

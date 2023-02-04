@@ -28,6 +28,28 @@ function bar_diameter(size: number) {
   }
 }
 
+type ReinforcementAreasT = { [key: string]: number };
+
+const REINFORCEMENT_AREAS: ReinforcementAreasT = {
+  "3": 0.11,
+  "4": 0.2,
+  "5": 0.31,
+  "6": 0.44,
+  "7": 0.6,
+  "8": 0.79,
+  "9": 1.0,
+  "10": 1.27,
+  "11": 1.56,
+  "14": 2.25,
+  "18": 4.0,
+};
+
+function bar_area(size: number) {
+  return (
+    REINFORCEMENT_AREAS[size.toFixed(0)] || +(Math.PI * (bar_diameter(size) / 2) ** 2).toFixed(2)
+  );
+}
+
 // ACI 318-14 Table 25.3.1
 function bar_bend_radius(size: number) {
   switch (size) {
@@ -58,4 +80,4 @@ function bar_bend_radius(size: number) {
   }
 }
 
-export { bar_diameter, bar_bend_radius };
+export { bar_area, bar_diameter, bar_bend_radius };
