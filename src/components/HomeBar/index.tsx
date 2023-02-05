@@ -4,7 +4,7 @@ import { Container, Grid, Typography, Link } from "@mui/material/";
 import HomeIcon from "@mui/icons-material/Home";
 import ENCOMP from "./ENCOMP.png";
 
-// Home bar with logo nad menu options
+// Home bar with logo
 export default function HomeBar() {
   return (
     <Container maxWidth="md" className="page-top-padding">
@@ -14,7 +14,7 @@ export default function HomeBar() {
         <Grid item xs={8}>
           <Typography align="center">
             <a href="https://encompapp.com/">
-              <img src={ENCOMP} alt="Encomp Logo"></img>
+              <img src={ENCOMP} alt="Encomp Logo" className="main-logo"></img>
             </a>
           </Typography>
         </Grid>
@@ -25,7 +25,7 @@ export default function HomeBar() {
           <Grid item container direction="column-reverse" xs={8}>
             <Typography align="center">
               <Link href="https://encompapp.com/">
-                <HomeIcon fontSize="large" color="primary" />
+                <HomeIcon fontSize="large" color="primary" titleAccess="Home Button" />
               </Link>
             </Typography>
           </Grid>

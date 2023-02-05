@@ -135,8 +135,16 @@ export default function BeamShapeForm({ setShowResult, setGetBeam, setGetBeamSec
   useEffect(() => {
     function resizeBeam() {
       if (beamGridRef.current !== null) {
+        const windowHeight = window.innerHeight;
+        const windowWidth = window.innerWidth;
+        const portraitOrientation = windowHeight / windowWidth > 1.0;
         setMaxwidth(beamGridRef.current.clientWidth);
-        setMaxheight(Math.min(beamGridRef.current.clientWidth * 2, 0.75 * window.innerHeight));
+        setMaxheight(
+          Math.min(
+            beamGridRef.current.clientWidth * 2,
+            portraitOrientation ? 300 : 0.75 * window.innerHeight
+          )
+        );
       }
     }
 
@@ -211,11 +219,11 @@ export default function BeamShapeForm({ setShowResult, setGetBeam, setGetBeamSec
   return (
     <div className="not-calc-report">
       <Grid container className="small-margins" spacing={3} marginBottom="2rem">
-        <Grid item xs={4} ref={beamGridRef}>
+        <Grid item xs={12} md={4} ref={beamGridRef}>
           {getBeamSection(null)}
         </Grid>
-        <Grid item xs={1}></Grid>
-        <Grid item xs={6}>
+        <Grid item xs={0} md={1}></Grid>
+        <Grid item xs={12} md={6}>
           <Grid container spacing={2}>
             <Grid item xs={6}>
               <NumInput

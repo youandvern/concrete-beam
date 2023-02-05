@@ -26,6 +26,8 @@ const displayResult = (
     key={"calc-description-box-" + varName}
     padding="0.5rem"
     margin="0.5rem"
+    width="100%"
+    maxWidth="350px"
     sx={{
       borderStyle: "solid",
       borderRadius: "1rem",
@@ -80,9 +82,10 @@ export default function BeamResults({ showresult = false, getbeam, getBeamSectio
           <Stack
             direction="row"
             justifyContent="space-between"
+            spacing={2}
             alignItems="center"
             marginBottom="1rem"
-            marginRight="1rem"
+            marginRight={{ sx: "0px", sm: "1rem" }}
           >
             <Typography variant="h2">Results:</Typography>
 
@@ -97,7 +100,7 @@ export default function BeamResults({ showresult = false, getbeam, getBeamSectio
           </Stack>
 
           <Grid container spacing={3}>
-            <Grid item xs={7}>
+            <Grid item xs={0} md={7} display={{ xs: "none", md: "block" }}>
               <Box height="100%" display="flex" flexDirection="column" justifyContent="center">
                 <DataTable
                   header_list={getbeam.reinforcementHeaders}
@@ -107,8 +110,14 @@ export default function BeamResults({ showresult = false, getbeam, getBeamSectio
               </Box>
             </Grid>
 
-            <Grid item xs={5} container direction="column" spacing={0} className="justify-apart">
-              <Grid item>
+            <Grid item xs={12} md={5} className="justify-apart">
+              <Box
+                width="100%"
+                display="flex"
+                flexDirection="column"
+                justifyContent="center"
+                alignItems="center"
+              >
                 {displayResult(
                   "Moment Capacity",
                   "\\phi M_n",
@@ -124,7 +133,17 @@ export default function BeamResults({ showresult = false, getbeam, getBeamSectio
                   theme
                 )}
                 {displayResult("Neutral axis depth", "c", getbeam.c.toFixed(3), "\\ in", theme)}
-              </Grid>
+              </Box>
+            </Grid>
+
+            <Grid item xs={12} md={0} display={{ xs: "block", md: "none" }}>
+              <Box>
+                <DataTable
+                  header_list={getbeam.reinforcementHeaders}
+                  data_list={getbeam.reinforcementResults}
+                  title="Reinforcement Demands at Flexural Capacity"
+                />
+              </Box>
             </Grid>
           </Grid>
         </div>
