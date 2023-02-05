@@ -129,7 +129,7 @@ export default function BeamShapeForm({ setShowResult, setGetBeam, setGetBeamSec
       setShowResult(result.show);
       setGetBeam(result.data);
     });
-  }, [fc, fy, w, h, barProps, setShowResult, setGetBeam]);
+  }, [fc, fy, w, h, barProps, nlegs, legsize, legspacing, setShowResult, setGetBeam]);
 
   // reset beam section scaling to fit inside component when window size changes
   useEffect(() => {
@@ -209,181 +209,190 @@ export default function BeamShapeForm({ setShowResult, setGetBeam, setGetBeamSec
   ]);
 
   return (
-    <Grid container className="small-margins" spacing={3}>
-      <Grid item xs={4} ref={beamGridRef}>
-        {getBeamSection(null)}
-      </Grid>
-      <Grid item xs={1}></Grid>
-      <Grid item xs={6}>
-        <Grid container spacing={2}>
-          <Grid item xs={6}>
-            <NumInput
-              label="Concrete Strength"
-              value={fc}
-              onChange={setFc}
-              unit="psi"
-              min={0}
-              max={12000}
-              step={500}
-            />
-          </Grid>
+    <div className="not-calc-report">
+      <Grid container className="small-margins" spacing={3} marginBottom="2rem">
+        <Grid item xs={4} ref={beamGridRef}>
+          {getBeamSection(null)}
+        </Grid>
+        <Grid item xs={1}></Grid>
+        <Grid item xs={6}>
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <NumInput
+                label="Concrete Strength"
+                value={fc}
+                onChange={setFc}
+                unit="psi"
+                min={0}
+                max={12000}
+                step={500}
+              />
+            </Grid>
 
-          <Grid item xs={6}>
-            <NumInput
-              label="Steel Strength"
-              value={fy}
-              onChange={setFy}
-              unit="ksi"
-              min={0}
-              max={200}
-              step={20}
-            />
-          </Grid>
+            <Grid item xs={6}>
+              <NumInput
+                label="Steel Strength"
+                value={fy}
+                onChange={setFy}
+                unit="ksi"
+                min={0}
+                max={200}
+                step={20}
+              />
+            </Grid>
 
-          <Grid item xs={6}>
-            <NumInput label="Beam Width" value={w} onChange={setW} min={1} max={48} />
-          </Grid>
+            <Grid item xs={6}>
+              <NumInput label="Beam Width" value={w} onChange={setW} min={1} max={48} />
+            </Grid>
 
-          <Grid item xs={6}>
-            <NumInput label="Beam Height" value={h} onChange={setH} unit="in" min={1} max={72} />
-          </Grid>
+            <Grid item xs={6}>
+              <NumInput label="Beam Height" value={h} onChange={setH} unit="in" min={1} max={72} />
+            </Grid>
 
-          <Grid item xs={12}>
-            <NumSlider
-              label="Number of Bars:"
-              value={nbars}
-              onChange={setNbars}
-              min={1}
-              max={25}
-              step={1}
-            />
-          </Grid>
+            <Grid item xs={12}>
+              <NumSlider
+                label="Number of Bars:"
+                value={nbars}
+                onChange={setNbars}
+                min={1}
+                max={25}
+                step={1}
+              />
+            </Grid>
 
-          <Grid item xs={12}>
-            <NumSlider
-              label="Bar Size (US):"
-              value={barsize}
-              onChange={setBarsize}
-              min={3}
-              max={11}
-              step={1}
-            />
-          </Grid>
+            <Grid item xs={12}>
+              <NumSlider
+                label="Bar Size (US):"
+                value={barsize}
+                onChange={setBarsize}
+                min={3}
+                max={11}
+                step={1}
+              />
+            </Grid>
 
-          <Grid item xs={6}>
-            <NumInput
-              label="Side Clear Cover"
-              value={side_cover}
-              onChange={setSide_cover}
-              unit="in"
-              min={0}
-              max={max_side_cover}
-              step={0.25}
-            />
-          </Grid>
+            <Grid item xs={6}>
+              <NumInput
+                label="Side Clear Cover"
+                value={side_cover}
+                onChange={setSide_cover}
+                unit="in"
+                min={0}
+                max={max_side_cover}
+                step={0.25}
+              />
+            </Grid>
 
-          <Grid item xs={6}>
-            <NumInput
-              label="Bottom Clear Cover"
-              value={bot_cover}
-              onChange={setBot_cover}
-              unit="in"
-              min={0}
-              max={max_bot_cover}
-              step={0.25}
-            />
-          </Grid>
+            <Grid item xs={6}>
+              <NumInput
+                label="Bottom Clear Cover"
+                value={bot_cover}
+                onChange={setBot_cover}
+                unit="in"
+                min={0}
+                max={max_bot_cover}
+                step={0.25}
+              />
+            </Grid>
 
-          <Grid item xs={12}>
-            <NumSlider
-              label="Number of Top Bars:"
-              value={nbarst}
-              onChange={setNbarst}
-              min={0}
-              max={25}
-              step={1}
-            />
-          </Grid>
+            <Grid item xs={12}>
+              <Accordion>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                  <Typography>Top Reinforcement</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Grid container spacing={3} alignItems="center">
+                    <Grid item xs={12}>
+                      <NumSlider
+                        label="Number of Top Bars:"
+                        value={nbarst}
+                        onChange={setNbarst}
+                        min={0}
+                        max={25}
+                        step={1}
+                      />
+                    </Grid>
 
-          <Grid item xs={12}>
-            <NumSlider
-              label="Top Bar Size (US):"
-              value={barsizet}
-              onChange={setBarsizet}
-              min={3}
-              max={11}
-              step={1}
-            />
-          </Grid>
+                    <Grid item xs={12}>
+                      <NumSlider
+                        label="Top Bar Size (US):"
+                        value={barsizet}
+                        onChange={setBarsizet}
+                        min={3}
+                        max={11}
+                        step={1}
+                      />
+                    </Grid>
 
-          <Grid item xs={6}>
-            <NumInput
-              label="Top Clear Cover"
-              value={top_cover}
-              onChange={setTop_cover}
-              unit="in"
-              min={0}
-              max={max_top_cover}
-              step={0.25}
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-              >
-                <Typography>Advanced</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Grid container spacing={3} alignItems="center">
-                  <Grid item xs={12}>
-                    <NumSlider
-                      label="Number of Stirrup Legs:"
-                      value={nlegs}
-                      onChange={setNlegs}
-                      min={0}
-                      max={12}
-                      step={1}
-                    />
+                    <Grid item xs={12}>
+                      <NumInput
+                        label="Top Clear Cover"
+                        value={top_cover}
+                        onChange={setTop_cover}
+                        unit="in"
+                        min={0}
+                        max={max_top_cover}
+                        step={0.25}
+                      />
+                    </Grid>
                   </Grid>
+                </AccordionDetails>
+              </Accordion>
+            </Grid>
 
-                  <Grid item xs={12}>
-                    <NumSlider
-                      label="Stirrup Leg Size (US):"
-                      value={legsize}
-                      onChange={setLegsize}
-                      min={3}
-                      max={8}
-                      step={1}
-                    />
-                  </Grid>
+            <Grid item xs={12}>
+              <Accordion>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                  <Typography>Shear Reinforcement</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Grid container spacing={3} alignItems="center">
+                    <Grid item xs={12}>
+                      <NumSlider
+                        label="Number of Stirrup Legs:"
+                        value={nlegs}
+                        onChange={setNlegs}
+                        min={0}
+                        max={12}
+                        step={1}
+                      />
+                    </Grid>
 
-                  <Grid item xs={12}>
-                    <NumInput
-                      label="Stirrup Leg Spacing"
-                      value={legspacing}
-                      onChange={setLegspacing}
-                      unit="in"
-                      min={0}
-                      max={100}
-                    />
+                    <Grid item xs={12}>
+                      <NumSlider
+                        label="Stirrup Leg Size (US):"
+                        value={legsize}
+                        onChange={setLegsize}
+                        min={3}
+                        max={8}
+                        step={1}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                      <NumInput
+                        label="Stirrup Leg Spacing"
+                        value={legspacing}
+                        onChange={setLegspacing}
+                        unit="in"
+                        min={0}
+                        max={100}
+                      />
+                    </Grid>
                   </Grid>
-                </Grid>
-              </AccordionDetails>
-            </Accordion>
+                </AccordionDetails>
+              </Accordion>
+            </Grid>
+
+            <br />
           </Grid>
-
-          <br />
+        </Grid>
+        <Grid item xs={12}>
+          <Button variant="outlined" fullWidth color="primary" onClick={updateResult}>
+            Calculate!
+          </Button>
         </Grid>
       </Grid>
-      <Grid item xs={12}>
-        <Button variant="outlined" fullWidth color="primary" onClick={updateResult}>
-          Calculate!
-        </Button>
-      </Grid>
-    </Grid>
+    </div>
   );
 }

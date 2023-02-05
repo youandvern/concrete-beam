@@ -57,7 +57,7 @@ const incrementAndGetHeaderCount = (headerCounts: number[], level: number) => {
 };
 
 const SectionDisplay = (section: (maxHeight: number) => JSX.Element) => (
-  <Box display="flex" justifyContent="center">
+  <Box display="flex" justifyContent="center" className="no-break">
     {section(300)}
   </Box>
 );
