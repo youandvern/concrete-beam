@@ -55,5 +55,3 @@ export default function InputTableReport({ item }: Props) {
     </>
   );
 }
-
-// description reference name

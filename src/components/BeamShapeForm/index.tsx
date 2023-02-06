@@ -14,6 +14,7 @@ import {
   AccordionDetails,
   Typography,
   Button,
+  CircularProgress,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ConcreteProps, { BarSizeT } from "../Interfaces/ConcreteProps";
@@ -45,6 +46,8 @@ export default function BeamShapeForm({ setShowResult, setGetBeam, setGetBeamSec
   const [nlegs, setNlegs] = useState(0);
   const [legsize, setLegsize] = useState(3);
   const [legspacing, setLegspacing] = useState(8);
+
+  const [resultsLoading, setResultsLoading] = useState(false);
 
   const beamGridRef = useRef<HTMLDivElement>(null);
 
@@ -114,6 +117,7 @@ export default function BeamShapeForm({ setShowResult, setGetBeam, setGetBeamSec
   }, [nlegs, legsize, barsize, h, bot_cover, barsizet, top_cover, nbars, nbarst, w, side_cover]);
 
   const updateResult = useCallback(() => {
+    setResultsLoading(true);
     const concrete_props: ConcreteProps = {
       fc: fc,
       fy: fy,
@@ -128,6 +132,9 @@ export default function BeamShapeForm({ setShowResult, setGetBeam, setGetBeamSec
     FetchResults(barProps, concrete_props).then((result) => {
       setShowResult(result.show);
       setGetBeam(result.data);
+      setTimeout(() => {
+        setResultsLoading(false);
+      }, 100);
     });
   }, [fc, fy, w, h, barProps, nlegs, legsize, legspacing, setShowResult, setGetBeam]);
 
@@ -396,8 +403,21 @@ export default function BeamShapeForm({ setShowResult, setGetBeam, setGetBeamSec
           </Grid>
         </Grid>
         <Grid item xs={12}>
-          <Button variant="outlined" fullWidth color="primary" onClick={updateResult}>
-            Calculate!
+          <Button
+            variant="outlined"
+            disabled={resultsLoading}
+            fullWidth
+            color="primary"
+            onClick={updateResult}
+          >
+            {resultsLoading ? (
+              <>
+                Loading Results...{" "}
+                <CircularProgress color="inherit" size="1rem" sx={{ marginLeft: "1rem" }} />
+              </>
+            ) : (
+              "Calculate!"
+            )}
           </Button>
         </Grid>
       </Grid>

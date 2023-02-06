@@ -71,23 +71,14 @@ interface Props {
 export default function CalcReport({ runResults, beamSection }: Props) {
   // const runResults = useAppSelector(getCalculationRunResults)?.items;
   let headerCounts = [0];
-  const [typesetLoading, setTypesetLoading] = useState(true);
 
   // update mathjax whenever math containing items change
   useEffect(() => {
-    setTypesetLoading(true);
-
-    // add delay to allow initial render then typeset
-    setTimeout(() => {
-      updateMathJax().then(() => {
-        setTypesetLoading(false);
-      });
-    }, 25);
+    updateMathJax();
   }, [runResults]);
 
   return (
     <Box maxWidth="980px">
-      {typesetLoading && <h2>Calculations are loading...</h2>}
       {runResults &&
         runResults.map((item, index) => {
           switch (item.type) {
