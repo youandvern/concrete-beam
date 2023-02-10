@@ -21,7 +21,9 @@ function getTable(item: (string | number | null)[][], name?: string) {
         <TableHead>
           <TableRow>
             {heading.map((columnTitle) => (
-              <TableCell key={`column-${columnTitle}`}>{columnTitle}</TableCell>
+              <TableCell key={`column-${columnTitle}`}>
+                <CalcTypography>{columnTitle}</CalcTypography>
+              </TableCell>
             ))}
           </TableRow>
         </TableHead>
@@ -29,7 +31,9 @@ function getTable(item: (string | number | null)[][], name?: string) {
           {data.map((row, i) => (
             <TableRow key={`data-row-${i}`}>
               {row.map((cell, j) => (
-                <TableCell key={`cell-${i}-${j}`}>{cell}</TableCell>
+                <TableCell key={`cell-${i}-${j}`}>
+                  <CalcTypography>{cell}</CalcTypography>
+                </TableCell>
               ))}
             </TableRow>
           ))}
