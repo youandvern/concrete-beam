@@ -1,4 +1,4 @@
-import { Box, SxProps } from "@mui/material";
+import { Box, styled } from "@mui/material";
 import {
   Assumption,
   BodyHeading,
@@ -20,8 +20,8 @@ import BodyHeaderReport from "./CalcReportComponents/BodyHeaderReport";
 import CalcVariableReport from "./CalcReportComponents/CalcVariableReport";
 import CheckVariableReport from "./CalcReportComponents/CheckVariableReport";
 import CheckVariablesTextReport from "./CalcReportComponents/CheckVariablesTextReport";
-import { getCalcKey } from "./CalcReportComponents/reportUtilities";
-import { useEffect, useState } from "react";
+import { CalcTypography, getCalcKey } from "./CalcReportComponents/reportUtilities";
+import { useEffect } from "react";
 import { updateMathJax } from "../..";
 import ResultTableReport from "./CalcReportComponents/ResultTableReport";
 import InputTableReport from "./CalcReportComponents/InputTableReport";
@@ -35,6 +35,12 @@ const headLevelToFontSize = {
 } as {
   [key: number]: string;
 };
+
+const StyledLink = styled("a")({
+  textDecoration: "none",
+  color: "inherit",
+  fontWeight: "bold",
+});
 
 const getFontSizeForHeadLevel = (level: number) =>
   level > 0 && level < 6 ? headLevelToFontSize[level] : "1.25rem";
@@ -132,6 +138,12 @@ export default function CalcReport({ runResults, beamSection }: Props) {
               return null;
           }
         })}
+      <CalcTypography marginTop="3rem" textAlign="right" className="no-break">
+        Powered by{" "}
+        <StyledLink href="https://encompapp.com" target="_blank" rel="noopener noreferrer">
+          encompapp.com
+        </StyledLink>
+      </CalcTypography>
     </Box>
   );
 }
