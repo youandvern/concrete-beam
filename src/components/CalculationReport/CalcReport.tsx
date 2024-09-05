@@ -1,30 +1,30 @@
 import { Box, styled } from "@mui/material";
+import { useEffect } from "react";
+import { updateMathJax } from "../..";
+import AssumptionReport from "./CalcReportComponents/AssumptionReport";
+import BodyHeaderReport from "./CalcReportComponents/BodyHeaderReport";
+import BodyTextReport from "./CalcReportComponents/BodyTextReport";
+import CalcTitleReport from "./CalcReportComponents/CalcTitleReport";
+import CalcVariableReport from "./CalcReportComponents/CalcVariableReport";
+import CheckVariableReport from "./CalcReportComponents/CheckVariableReport";
+import CheckVariablesTextReport from "./CalcReportComponents/CheckVariablesTextReport";
+import DeclareVariableReport from "./CalcReportComponents/DeclareVariableReport";
+import InputTableReport from "./CalcReportComponents/InputTableReport";
+import { CalcTypography, getCalcKey } from "./CalcReportComponents/reportUtilities";
+import ResultTableReport from "./CalcReportComponents/ResultTableReport";
 import {
   Assumption,
   BodyHeading,
-  TextBlock,
   CalcTypeToParse,
   CalculationTitle,
   CalcVariable,
   Comparison,
   ComparisonForced,
+  InputTable,
   InputVariable,
   ResultTable,
-  InputTable,
+  TextBlock,
 } from "./CalculationRunTypes";
-import BodyTextReport from "./CalcReportComponents/BodyTextReport";
-import CalcTitleReport from "./CalcReportComponents/CalcTitleReport";
-import AssumptionReport from "./CalcReportComponents/AssumptionReport";
-import DeclareVariableReport from "./CalcReportComponents/DeclareVariableReport";
-import BodyHeaderReport from "./CalcReportComponents/BodyHeaderReport";
-import CalcVariableReport from "./CalcReportComponents/CalcVariableReport";
-import CheckVariableReport from "./CalcReportComponents/CheckVariableReport";
-import CheckVariablesTextReport from "./CalcReportComponents/CheckVariablesTextReport";
-import { CalcTypography, getCalcKey } from "./CalcReportComponents/reportUtilities";
-import { useEffect } from "react";
-import { updateMathJax } from "../..";
-import ResultTableReport from "./CalcReportComponents/ResultTableReport";
-import InputTableReport from "./CalcReportComponents/InputTableReport";
 
 const headLevelToFontSize = {
   1: "2rem",
@@ -140,8 +140,8 @@ export default function CalcReport({ runResults, beamSection }: Props) {
         })}
       <CalcTypography marginTop="3rem" textAlign="right" className="no-break">
         Powered by{" "}
-        <StyledLink href="https://encompapp.com" target="_blank" rel="noopener noreferrer">
-          encompapp.com
+        <StyledLink href="https://efficalc.com" target="_blank" rel="noopener noreferrer">
+          efficalc.com
         </StyledLink>
       </CalcTypography>
     </Box>

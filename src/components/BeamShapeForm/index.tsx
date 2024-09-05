@@ -1,24 +1,23 @@
-import React from "react";
-import { useState, useEffect, useRef, useCallback } from "react";
-import "./style.css";
-import NumInput from "../NumInput";
-import NumSlider from "../NumSlider";
-import BeamSection from "../BeamSection";
-import { FetchResults } from "../FetchResults";
-import { bar_area, bar_diameter } from "../utilities";
-import BarsWithProps from "../Interfaces/BarsWithProps";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
-  Grid,
   Accordion,
-  AccordionSummary,
   AccordionDetails,
-  Typography,
+  AccordionSummary,
   Button,
   CircularProgress,
+  Grid,
+  Typography,
 } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ConcreteProps, { BarSizeT } from "../Interfaces/ConcreteProps";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import BeamSection from "../BeamSection";
+import { FetchResults } from "../FetchResults";
 import APIResults from "../Interfaces/APIResults";
+import BarsWithProps from "../Interfaces/BarsWithProps";
+import ConcreteProps, { BarSizeT } from "../Interfaces/ConcreteProps";
+import NumInput from "../NumInput";
+import NumSlider from "../NumSlider";
+import { bar_area, bar_diameter } from "../utilities";
+import "./style.css";
 
 // expected properties to draw beam section
 interface FormProps {
@@ -126,7 +125,7 @@ export default function BeamShapeForm({ setShowResult, setGetBeam, setGetBeamSec
       h: h,
       nShearBars: nlegs,
       spacingShearBars: legspacing,
-      sizeShearBars: `\\#${legsize}` as BarSizeT,
+      sizeShearBars: `#${legsize}` as BarSizeT,
     };
 
     FetchResults(barProps, concrete_props).then((result) => {

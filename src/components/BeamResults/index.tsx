@@ -1,19 +1,18 @@
-import React from "react";
 import {
+  Box,
+  Button,
   Collapse,
   Container,
   Grid,
-  Typography,
-  Button,
-  Box,
-  useTheme,
-  Theme,
   Stack,
-  Paper,
+  Theme,
+  Typography,
+  useTheme,
 } from "@mui/material";
+import CalcReport from "../CalculationReport/CalcReport";
+import { wrapMathString } from "../CalculationReport/CalcReportComponents/reportUtilities";
 import DataTable from "../DataTable";
 import APIResults from "../Interfaces/APIResults";
-import CalcReport from "../CalculationReport/CalcReport";
 
 const displayResult = (
   description: string,
@@ -39,7 +38,7 @@ const displayResult = (
       {description}
     </Typography>
     <Typography key={`calc-result-${varName}`} align="center">
-      {`\\( ${varName} = ${result} \ \\mathrm{${unit}} \\)`}
+      {wrapMathString(`${varName} = ${result} \ \\mathrm{${unit}}`)}
     </Typography>
   </Box>
 );
@@ -64,7 +63,7 @@ export default function BeamResults({ showresult = false, getbeam, getBeamSectio
       document
         .querySelectorAll(".not-calc-report")
         .forEach((element) => element?.classList.remove("no-print"));
-    }, 500);
+    }, 1000);
   };
 
   const showCalculationsDiv = () => {

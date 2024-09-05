@@ -18,8 +18,9 @@ export const CalcTypography = styled(Typography)(() => ({
   fontFamily: "serif",
 }));
 
-export const wrapMathString = (tex: string) => `\\( ${tex} \\)`;
-export const wrapMathEquationString = (tex: string) => `\\[ ${tex} \\]`;
+const escapeTexCharacters = (tex: string) => tex.replace("#", "\\#");
+export const wrapMathString = (tex: string) => `\\( ${escapeTexCharacters(tex)} \\)`;
+export const wrapMathEquationString = (tex: string) => `\\[ ${escapeTexCharacters(tex)} \\]`;
 export const wrapAlignment = (tex: string) => `${BEGIN_ALIGN} ${tex} ${END_ALIGN}`;
 
 export const addReference = (mainContent: JSX.Element, reference?: string) => (

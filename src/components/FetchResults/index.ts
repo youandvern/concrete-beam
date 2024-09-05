@@ -1,12 +1,11 @@
+import APIResults, { APIResultsUnparced } from "../Interfaces/APIResults";
 import BarsWithProps from "../Interfaces/BarsWithProps";
 import ConcreteProps from "../Interfaces/ConcreteProps";
-import APIResults from "../Interfaces/APIResults";
-import { APIResultsUnparced } from "../Interfaces/APIResults";
 
 // https://api.encompapp.com
 // http://127.0.0.1:8000
-// const BASE_URL = "https://api.encompapp.com";
-const BASE_URL = "http://127.0.0.1:8000";
+const BASE_URL = "https://api.encompapp.com";
+// const BASE_URL = "http://127.0.0.1:8000";
 
 // https://www.smashingmagazine.com/2020/07/custom-react-hook-fetch-cache-data/
 
